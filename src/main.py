@@ -51,23 +51,27 @@ def update_client(clients, update_client_name):
             break
         else:
             index += 1
-        print("No se encontro al cliente")
+        #print("No se encontro al cliente")
 
 
 def delete_client(client_name):
     global clients
+    index = 0
 
-    if client_name in clients:
-        clients.remove(client_name)
-    else:
-        _print_message_not_client_in_list()
+    for client in clients:
+        if client["name"] == client_name:
+            del clients[index]
+            break
+        else:
+            index += 1
+        #_print_message_not_client_in_list()
 
 
 def search_client(client_name):
     global clients
     
     for client in clients:
-        if client_name != client:
+        if client_name != client["name"]:
             continue
         else:
             return True
