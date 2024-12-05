@@ -5,15 +5,27 @@ import sys
 deepsale_title = pyfiglet.figlet_format('DeppSale')
 
 
-clients = 'miguel,sybell,alonso,'
+clients = [
+    {
+        'name': 'Miguel',
+        'company': 'Weir Minerals',
+        'email': 'miguel.diaz@weir.com',
+        'position': 'Development Engineer'
+    },
+    {
+        'name': 'Sybell',
+        'company': 'Camara Comercio Santiago',
+        'email': 'sybell.alejandria@ccs.cl',
+        'position': 'Gerente fidelizacion clientes'
+    }
+]
 
 
-def crear_client(client_name):
+def crear_client(client):
     global clients
 
-    if client_name not in clients:
-        clients += client_name
-        _add_comma()
+    if client not in clients:
+        clients.append(client)
     else:
         print('Client already in the client\'s list')
 
@@ -21,42 +33,44 @@ def crear_client(client_name):
 def list_client():
     global clients
 
-    print(clients)
+    for idx, client in enumerate(clients):
+        print('{}: {}'.format(idx, client['name']))
 
 
-def update_client(client_name, update_client_name):
-    global clients
+def update_client(clients, update_client_name):
+    index = 0
 
-    if client_name in clients:
-        clients = clients.replace(client_name + ',', update_client_name + ',')
-    else:
-        _print_message_not_client_in_list()
+    for client in clients:
+        if client["name"] == update_client_name:
+            clients[index] = {
+                'name': _get_client_field('name'),
+                'company': _get_client_field('company'),
+                'email': _get_client_field('email'),
+                'position': _get_client_field('position')
+            }
+            break
+        else:
+            index += 1
+        print("No se encontro al cliente")
 
 
 def delete_client(client_name):
     global clients
 
     if client_name in clients:
-        clients = clients.replace(client_name + ',', '')
+        clients.remove(client_name)
     else:
         _print_message_not_client_in_list()
 
 
 def search_client(client_name):
     global clients
-    clients_list = clients.split(',')
     
-    for client in clients_list:
+    for client in clients:
         if client_name != client:
             continue
         else:
             return True
-
-
-def _add_comma():
-    global clients
-
-    clients += ','
 
 
 def _print_welcome():
@@ -65,9 +79,18 @@ def _print_welcome():
     print('What would you like to do today?')
     print('')
     print('[C]reate a client')
+    print('[L]ist clients')
     print('[U]pdate a client')
     print('[D]elete a client')
     print('[S]earch a client')
+
+
+def _get_client_field(field_name):
+    field = None
+
+    while not field:
+        field = input('What is the client {}? '.format(field_name))
+    return field
 
 
 def _get_client_name():
@@ -96,17 +119,23 @@ if __name__ == '__main__':
     command = command.upper()
 
     if command == 'C':
-        client_name = _get_client_name()
-        crear_client(client_name)
+        client = {
+            'name': _get_client_field('name'),
+            'company': _get_client_field('company'),
+            'email': _get_client_field('email'),
+            'position': _get_client_field('position')
+        }
+        crear_client(client)
         list_client()
     elif command == 'D':
         client_name = _get_client_name()
         delete_client(client_name)
         list_client()
     elif command == 'U':
-        client_name = _get_client_name()
         update_client_name = input('What is the update client name? ')
-        update_client(client_name, update_client_name)
+        update_client(clients, update_client_name)
+        list_client()
+    elif command == 'L':
         list_client()
     elif command == 'S':
         client_name = _get_client_name()
