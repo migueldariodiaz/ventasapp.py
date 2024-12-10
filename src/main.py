@@ -34,7 +34,12 @@ def list_client():
     global clients
 
     for idx, client in enumerate(clients):
-        print('{}: {}'.format(idx, client['name']))
+        uid = idx
+        name = client['name']
+        company = client['company']
+        email = client['email']
+        position = client['position']
+        print(f'{uid} | {name} | {company} | {email} | {position}')
 
 
 def update_client(clients, update_client_name):
